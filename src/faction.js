@@ -2,12 +2,13 @@ import Weapon from './weapon.js'
 import {Rifle, Bazooka, Laser} from './weapon.js'
 
 export default class Faction{
-  constructor(id, color){
+  constructor(id, color, spawn){
     this.id = id
     this.points = 0
     this.totalPoints = 0
     this.color = color
-    this.weaponTable = [new Weapon(), new Rifle(), new Bazooka(), new Laser()]
+    this.spawn = spawn
+    this.weaponTable = [Weapon, Rifle, Bazooka, Laser]
     this.level = 0
     this.weapons = [this.weaponTable[0]]
     this.nextLevel = 10
@@ -22,11 +23,9 @@ export default class Faction{
     this.level++
     console.log('Faction '+this.id+' get to lvl '+this.level+' !')
     this.nextLevel = Math.round(this.nextLevel * 1.3)
-    this.weapons.push(this.weaponTable[this.level])
+    if(this.weaponTable[this.level]) this.weapons.push(this.weaponTable[this.level])
   }
   getWeapon(){
-    let selection = this.level
-    if(this.level > this.weapons.length) selection = this.weapons.length
-    return this.weapons[ Math.floor(Math.random() * selection) ]
+    return new this.weapons[ Math.floor(Math.random() * this.weapons.length) ]
   }
 }

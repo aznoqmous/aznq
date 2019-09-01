@@ -3,7 +3,7 @@ export default class Weapon{
     this.shotSpeed = shotSpeed || 5
     this.fireRate = fireRate || 1000
     this.bulletSize = bulletSize || 3
-    this.lastFire = Date.now()
+    this.lastFire = 0
   }
 }
 

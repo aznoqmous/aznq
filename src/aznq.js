@@ -7,26 +7,26 @@ export default class Aznq{
       element: document.body,
       backgroundColor: 'rgba(247,247,247,0.2)',
       peerColor: '#272727',
-      waveSpeed: 500
+      waveSpeed: 3000
     })
-    this.factions = [
-      new Faction(0, '#ea4335'),
-      new Faction(1, '#FFBC05'),
-      // new Faction(2, '#34A853'),
-      // new Faction(3, '#4285f4'),
-    ]
 
     this.init()
     this.build()
     this.bind()
 
+    this.factions = [
+      new Faction(0, "#4285f4", { x: this.c.width / 2, y: 10 }),
+      new Faction(1, '#ea4335', { x: this.c.width / 2, y: 10 }),
+      // new Faction(2, '#FFBC05', { x: this.c.width / 2, y: 10 }),
+      // new Faction(3, '#34A853', { x: 10, y: this.c.height / 2 }),
+      // new Faction(4, '#4285f4', { x: this.c.width - 10, y: this.c.height / 2 }),
+    ]
 
     this.character = new Dot(this.c.width/2, this.c.height/2, false, 0)
     this.dots = [this.character]
-    this.character.weapon = new Rifle()
     this.shots = []
     setInterval(()=>{
-      this.addFoe()
+      this.addFoe(1)
     }, this.config.waveSpeed)
   }
 
@@ -43,7 +43,15 @@ export default class Aznq{
       this.mouse = 'down'
     })
     this.c.addEventListener('mouseup', ()=>{ this.mouse = 'up' })
+    this.c.addEventListener('touchstart', (e)=>{
+      this.mouse = 'down'
+    })
+    this.c.addEventListener('touchend', ()=>{ this.mouse = 'up' })
     this.c.addEventListener('mousemove', (e)=>{
+      this.cursX = e.clientX
+      this.cursY = e.clientY
+    })
+    this.c.addEventListener('touchmove', (e)=>{
       this.cursX = e.clientX
       this.cursY = e.clientY
     })
@@ -97,27 +105,9 @@ export default class Aznq{
     this.ctx.fill()
   }
 
-  addFoe(){
-    let faction = Math.floor(Math.random() * (this.factions.length))
-    let x, y
-    if(faction == 0 || 4 ){
-      x = this.c.width * Math.random()
-      y = this.c.height + 10
-    }
-    if(faction == 1){
-      x = this.c.width * Math.random()
-      y = -10
-    }
-    if(faction == 2){
-      x = this.c.width + 10
-      y = this.c.height * Math.random()
-    }
-    if(faction == 3){
-      x = -10
-      y = this.c.height * Math.random()
-    }
-
-    this.newDot(x, y, faction)
+  addFoe(faction){
+    faction = faction || Math.floor(Math.random() * (this.factions.length))
+    this.newDot(this.factions[faction].spawn.x, this.factions[faction].spawn.y, faction)
   }
   newDot(x, y, faction){
     let newDot = new Dot(x, y, false, faction)
@@ -125,7 +115,7 @@ export default class Aznq{
     this.dots.push(newDot)
   }
   newShot(dot, spx, spy){
-    let newShot = new Dot(dot.x, dot.y, dot.weapon.bulletSize, dot.faction)
+    let newShot = new Dot(dot.x, dot.y, dot.weapon.bulletSize, dot.faction, dot)
     newShot.spx = spx
     newShot.spy = spy
     this.shots.push(newShot)
@@ -150,7 +140,7 @@ export default class Aznq{
     dot.spx *= 0.9
     dot.spy *= 0.9
     if(dot.weapon) this.dotShoot(dot)
-    if(dot != this.character && Math.random() < 0.1) {
+    if(dot != this.character && Math.random() < 0.3) {
       this.wanderDot(dot, 200)
     }
   }
@@ -180,6 +170,7 @@ export default class Aznq{
        nearest.live = false
        shot.live = false
        this.factions[shot.faction].addPoint(1)
+       shot.origin.weapon = new this.factions[shot.faction].weapons[this.factions[shot.faction].weapons.length-1]
     }
   }
 
