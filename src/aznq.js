@@ -15,7 +15,7 @@ export default class Aznq{
     this.bind()
 
     this.factions = [
-      new Faction(0, "#4285f4", { x: this.c.width / 2, y: 10 }),
+      new Faction(0, "#4285f4", { x: this.c.width / 2, y: this.c.height - 10 }),
       new Faction(1, '#ea4335', { x: this.c.width / 2, y: 10 }),
       // new Faction(2, '#FFBC05', { x: this.c.width / 2, y: 10 }),
       // new Faction(3, '#34A853', { x: 10, y: this.c.height / 2 }),
