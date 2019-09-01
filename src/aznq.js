@@ -41,20 +41,20 @@ export default class Aznq{
   bind(){
     this.c.addEventListener('mousedown', (e)=>{
       this.mouse = 'down'
-    })
-    this.c.addEventListener('mouseup', ()=>{ this.mouse = 'up' })
+    }, false)
+    this.c.addEventListener('mouseup', ()=>{ this.mouse = 'up' }, false)
     this.c.addEventListener('touchstart', (e)=>{
       this.mouse = 'down'
-    })
-    this.c.addEventListener('touchend', ()=>{ this.mouse = 'up' })
+    }, false)
+    this.c.addEventListener('touchend', ()=>{ this.mouse = 'up' }, false)
     this.c.addEventListener('mousemove', (e)=>{
       this.cursX = e.clientX
       this.cursY = e.clientY
-    })
+    }, false)
     this.c.addEventListener('touchmove', (e)=>{
-      this.cursX = e.clientX
-      this.cursY = e.clientY
-    })
+      this.cursX = e.touches[0].clientX
+      this.cursY = e.touches[0].clientY
+    }, false)
   }
   start(){
     this.isRunning = true
@@ -82,7 +82,9 @@ export default class Aznq{
     this.cleanEntities(this.dots)
     this.cleanEntities(this.shots)
     this.drawScores()
-    if(this.mouse == 'down') this.moveDot(this.character, this.cursX, this.cursY)
+    if(this.mouse == 'down' && this.cursX && this.cursY) {
+      this.moveDot(this.character, this.cursX, this.cursY)
+    }
   }
   cleanEntities(entities){
     let deadEntities = []
