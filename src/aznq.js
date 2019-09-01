@@ -26,7 +26,7 @@ export default class Aznq{
     this.dots = [this.character]
     this.shots = []
     setInterval(()=>{
-      this.addFoe(1)
+      this.addFoe()
     }, this.config.waveSpeed)
   }
 
