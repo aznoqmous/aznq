@@ -15,17 +15,19 @@ export default class Aznq{
     this.bind()
 
     this.factions = [
-      new Faction(0, "#4285f4", { x: this.c.width / 2, y: this.c.height - 10 }),
-      new Faction(1, '#ea4335', { x: this.c.width / 2, y: 10 }),
-      // new Faction(2, '#FFBC05', { x: this.c.width / 2, y: 10 }),
-      // new Faction(3, '#34A853', { x: 10, y: this.c.height / 2 }),
-      // new Faction(4, '#4285f4', { x: this.c.width - 10, y: this.c.height / 2 }),
+      new Faction(0, "#4285f4", { x: 0, y: 0 }),
+      new Faction(1, '#ea4335', { x: this.c.width, y: 10 }),
+      new Faction(2, '#FFBC05', { x: this.c.width, y: this.c.height }),
+      new Faction(3, '#34A853', { x: 0, y: this.c.height})
     ]
 
     this.character = new Dot(this.c.width/2, this.c.height/2, false, 0)
     this.dots = [this.character]
     this.shots = []
     setInterval(()=>{
+      this.addFoe()
+      this.addFoe()
+      this.addFoe()
       this.addFoe()
     }, this.config.waveSpeed)
   }
